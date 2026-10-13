@@ -8,3 +8,13 @@ func TestModeIsParsedAsOctal(t *testing.T) {
 		t.Errorf("parseMode(%q) = %o, %v, want 640", "0640", got, err)
 	}
 }
+
+func TestSecondValueIsRefused(t *testing.T) {
+	var s onceString
+	if err := s.Set("a"); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Set("b"); err == nil {
+		t.Errorf("second Set succeeded, value %q", s.value)
+	}
+}
