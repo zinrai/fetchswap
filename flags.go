@@ -13,6 +13,8 @@ type config struct {
 	dest    string
 	mode    os.FileMode
 	timeout time.Duration
+
+	showVersion bool
 }
 
 func parseFlags(args []string) (config, error) {
@@ -23,7 +25,12 @@ func parseFlags(args []string) (config, error) {
 	fs.StringVar(&cfg.dest, "dest", "", "file to replace")
 	fs.StringVar(&mode, "mode", "", "permission bits of dest in octal, such as 0644")
 	fs.DurationVar(&cfg.timeout, "timeout", 0, "limit for the whole request, such as 60s")
+	fs.BoolVar(&cfg.showVersion, "version", false, "print the version and exit")
 	fs.Parse(args)
+
+	if cfg.showVersion {
+		return cfg, nil
+	}
 
 	if err := checkRequired(fs, "url", "dest", "mode", "timeout"); err != nil {
 		return config{}, err

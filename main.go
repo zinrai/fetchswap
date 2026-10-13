@@ -12,6 +12,10 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(2)
 	}
+	if cfg.showVersion {
+		printVersion()
+		return
+	}
 	if err := run(cfg); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
