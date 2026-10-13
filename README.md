@@ -38,9 +38,9 @@ Exit status:
 For example, reload a service only after a successful fetch:
 
 ```
-fetchswap -url https://example.com/blocklist.txt \
-  -dest /etc/nginx/blocklist.txt -mode 0644 -timeout 60s \
-  && systemctl reload nginx
+fetchswap -url https://example.com/list.txt \
+  -dest /etc/example/list.txt -mode 0644 -timeout 60s \
+  && systemctl reload example.service
 ```
 
 ## Notes
