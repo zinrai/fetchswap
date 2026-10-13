@@ -16,7 +16,7 @@ file is renamed into place, or the existing file stays as it was.
 fetchswap -url URL -dest DEST -mode MODE -timeout DURATION
 ```
 
-All flags are required; a missing one stops the run.
+Each of these flags is required; a missing one stops the run.
 
 - `-url`: the URL to GET, over HTTP or HTTPS. Redirects are followed, and
   `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` are honored.
@@ -48,3 +48,7 @@ fetchswap -url https://example.com/blocklist.txt \
 - The replaced file is owned by the user running `fetchswap`.
 - If DEST is a symlink, the symlink itself is replaced by a regular file.
   Point `-dest` at the target to keep the link.
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
