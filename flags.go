@@ -32,6 +32,11 @@ func parseFlags(args []string) (config, error) {
 		return cfg, nil
 	}
 
+	// No positional arguments: an unquoted space in -dest would otherwise be
+	// dropped silently and the file written elsewhere.
+	if fs.NArg() > 0 {
+		return config{}, fmt.Errorf("unexpected argument %q", fs.Arg(0))
+	}
 	if err := checkRequired(fs, "url", "dest", "mode", "timeout"); err != nil {
 		return config{}, err
 	}
@@ -46,11 +51,6 @@ func parseFlags(args []string) (config, error) {
 // No defaults: the mode a file needs and how long a job may wait are the
 // caller's decisions.
 func checkRequired(fs *flag.FlagSet, names ...string) error {
-	// No positional arguments: an unquoted space in -dest would otherwise be
-	// dropped silently and the file written elsewhere.
-	if fs.NArg() > 0 {
-		return fmt.Errorf("unexpected argument %q", fs.Arg(0))
-	}
 	set := map[string]bool{}
 	fs.Visit(func(f *flag.Flag) { set[f.Name] = true })
 	for _, name := range names {
