@@ -19,12 +19,12 @@ type config struct {
 
 func parseFlags(args []string) (config, error) {
 	var cfg config
-	var url, dest, mode, timeout onceString
+	var mode string
 	fs := flag.NewFlagSet("fetchswap", flag.ExitOnError)
-	fs.Var(&url, "url", "`URL` to fetch")
-	fs.Var(&dest, "dest", "`file` to replace")
-	fs.Var(&mode, "mode", "permission `bits` of dest in octal, such as 0644")
-	fs.Var(&timeout, "timeout", "limit for the whole request, a `duration` such as 60s")
+	fs.StringVar(&cfg.url, "url", "", "`URL` to fetch")
+	fs.StringVar(&cfg.dest, "dest", "", "`file` to replace")
+	fs.StringVar(&mode, "mode", "", "permission `bits` of dest in octal, such as 0644")
+	fs.DurationVar(&cfg.timeout, "timeout", 0, "limit for the whole request, a `duration` such as 60s")
 	fs.BoolVar(&cfg.showVersion, "version", false, "print the version and exit")
 	fs.Parse(args)
 
@@ -35,15 +35,11 @@ func parseFlags(args []string) (config, error) {
 	if err := checkRequired(fs, "url", "dest", "mode", "timeout"); err != nil {
 		return config{}, err
 	}
-	m, err := parseMode(mode.value)
+	m, err := parseMode(mode)
 	if err != nil {
 		return config{}, err
 	}
-	d, err := time.ParseDuration(timeout.value)
-	if err != nil {
-		return config{}, fmt.Errorf("invalid timeout %q: %w", timeout.value, err)
-	}
-	cfg.url, cfg.dest, cfg.mode, cfg.timeout = url.value, dest.value, m, d
+	cfg.mode = m
 	return cfg, nil
 }
 
